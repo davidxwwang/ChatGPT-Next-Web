@@ -184,6 +184,13 @@ export function SideBar(props: { className?: string }) {
           onClick={() => showToast(Locale.WIP)}
           shadow
         />
+        <IconButton
+          icon={<PluginIcon />}
+          text={shouldNarrow ? undefined : Locale.Plugin.Name}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => showToast(Locale.WIP)}
+          shadow
+        />
       </div>
 
       <div
