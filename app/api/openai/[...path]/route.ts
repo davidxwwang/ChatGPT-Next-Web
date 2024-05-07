@@ -20,7 +20,7 @@ function getModels(remoteModelRes: OpenAIListModelResponse) {
   return remoteModelRes;
 }
 
-async function handle(
+async function handle2(
   req: NextRequest,
   { params }: { params: { path: string[] } },
 ) {
@@ -65,6 +65,55 @@ async function handle(
     }
 
     return response;
+  } catch (e) {
+    console.error("[OpenAI] ", e);
+    return NextResponse.json(prettyObject(e));
+  }
+}
+
+async function handle(
+  req: NextRequest,
+  { params }: { params: { path: string[] } },
+) {
+  console.log("[david Route] params ", params);
+
+  if (req.method === "OPTIONS") {
+    return NextResponse.json({ body: "OK" }, { status: 200 });
+  }
+
+  const subpath = params.path.join("/");
+
+  if (!ALLOWD_PATH.has(subpath)) {
+    console.log("[OpenAI Route] forbidden path ", subpath);
+    return NextResponse.json(
+      {
+        error: true,
+        msg: "you are not allowed to request " + subpath,
+      },
+      {
+        status: 403,
+      },
+    );
+  }
+
+  const authResult = auth(req, ModelProvider.GPT);
+  if (authResult.error) {
+    return NextResponse.json(authResult, {
+      status: 401,
+    });
+  }
+
+  try {
+    const url = "http://127.0.0.1:5000/get_data?param=value";
+
+    // 发起 GET 请求
+    const response = await fetch(url);
+    console.log("response", response.body);
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+    });
   } catch (e) {
     console.error("[OpenAI] ", e);
     return NextResponse.json(prettyObject(e));
