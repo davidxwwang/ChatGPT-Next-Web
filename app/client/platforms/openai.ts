@@ -98,6 +98,7 @@ export class ChatGPTApi implements LLMApi {
   }
 
   extractMessage(res: any) {
+    console.log("resp = " + JSON.stringify(res));
     return res.choices?.at(0)?.message?.content ?? "";
   }
 
@@ -283,6 +284,7 @@ export class ChatGPTApi implements LLMApi {
 
         const resJson = await res.json();
         const message = this.extractMessage(resJson);
+        console.log("message = " + message);
         options.onFinish(message);
       }
     } catch (e) {
