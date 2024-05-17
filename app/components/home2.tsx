@@ -32,7 +32,6 @@ import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
 import Contact from "./acontact";
-import Xxx from "./home2";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -126,53 +125,6 @@ const loadAsyncGoogleFont = () => {
   document.head.appendChild(linkEl);
 };
 
-function Screen() {
-  const config = useAppConfig();
-  const location = useLocation();
-  const isHome = location.pathname === Path.Home;
-  const isAuth = location.pathname === Path.Auth;
-  const isMobileScreen = useMobileScreen();
-  const shouldTightBorder =
-    getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
-
-  useEffect(() => {
-    loadAsyncGoogleFont();
-  }, []);
-
-  return (
-    <div
-      className={
-        styles.container +
-        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
-          getLang() === "ar" ? styles["rtl-screen"] : ""
-        }`
-      }
-    >
-      {isAuth ? (
-        <>
-          <AuthPage />
-        </>
-      ) : (
-        MyApp()
-
-        // <>
-        //   <SideBar className={isHome ? styles["sidebar-show"] : ""} />
-
-        //   <div className={styles["window-content"]} id={SlotID.AppBody}>
-        //     <Routes>
-        //       <Route path={Path.Home} element={<Chat />} />
-        //       <Route path={Path.NewChat} element={<NewChat />} />
-        //       <Route path={Path.Masks} element={<MaskPage />} />
-        //       <Route path={Path.Chat} element={<Chat />} />
-        //       <Route path={Path.Settings} element={<Settings />} />
-        //     </Routes>
-        //   </div>
-        //   </>
-      )}
-    </div>
-  );
-}
-
 function xxx() {
   const isHome = location.pathname === Path.Home;
   return (
@@ -207,8 +159,13 @@ function MyApp() {
     <div>
       <TabBar />
       <Routes>
-        <Route path="/*" element={<Xxx />} />
+        <Route path="/" element={xxx()} />
         <Route path="/about" element={<Contact />} />
+        <Route path={Path.Home} element={<Chat />} />
+        <Route path={Path.NewChat} element={<NewChat />} />
+        <Route path={Path.Masks} element={<MaskPage />} />
+        <Route path={Path.Chat} element={<Chat />} />
+        <Route path={Path.Settings} element={<Settings />} />
       </Routes>
     </div>
   );
@@ -234,7 +191,38 @@ export function useLoadData() {
   }, []);
 }
 
-export function Home() {
+export default function Xxx() {
+  const config = useAppConfig();
+  const location = useLocation();
+  const isHome = location.pathname === Path.Home;
+  const isMobileScreen = useMobileScreen();
+  const shouldTightBorder =
+    getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
+
+  return (
+    <div
+      className={
+        styles.container +
+        ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
+          getLang() === "ar" ? styles["rtl-screen"] : ""
+        }`
+      }
+    >
+      <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+      <div className={styles["window-content"]} id={SlotID.AppBody}>
+        <Routes>
+          <Route path={Path.Home} element={<Chat />} />
+          <Route path={Path.NewChat} element={<NewChat />} />
+          <Route path={Path.Masks} element={<MaskPage />} />
+          <Route path={Path.Chat} element={<Chat />} />
+          <Route path={Path.Settings} element={<Settings />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+function Home2() {
   useSwitchTheme();
   useLoadData();
   useHtmlLang();
@@ -248,11 +236,5 @@ export function Home() {
     return <Loading />;
   }
 
-  return (
-    <ErrorBoundary>
-      <Router>
-        <Screen />
-      </Router>
-    </ErrorBoundary>
-  );
+  return <Xxx />;
 }

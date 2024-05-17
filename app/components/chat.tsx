@@ -1422,6 +1422,11 @@ function _Chat() {
                       parentRef={scrollRef}
                       defaultShow={i >= messages.length - 6}
                     />
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: getMessageTextContent(message),
+                      }}
+                    />
                     {getMessageImages(message).length == 1 && (
                       <img
                         className={styles["chat-message-item-image"]}

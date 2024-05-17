@@ -76,7 +76,7 @@ async function handle(
   { params }: { params: { path: string[] } },
 ) {
   console.log("[david Route] params ", params);
-
+  // console.log("[david Route] body ", JSON.stringify(req.body));
   if (req.method === "OPTIONS") {
     return NextResponse.json({ body: "OK" }, { status: 200 });
   }
@@ -102,12 +102,25 @@ async function handle(
       status: 401,
     });
   }
-
+  const cookie = req.cookies.getAll();
   try {
-    const url = "http://127.0.0.1:5000/get_data?param=value";
+    const fetchOptions: RequestInit = {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
+      method: req.method,
+      body: req.body,
+      // to fix #2485: https://stackoverflow.com/questions/55920957/cloudflare-worker-typeerror-one-time-use-body
+      redirect: "manual",
+      // @ts-ignore
+      duplex: "half",
+    };
+
+    const url = "http://127.0.0.1:5000/get_data";
 
     // 发起 GET 请求
-    const response = await fetch(url);
+    const response = await fetch(url, fetchOptions);
     console.log("response", response.body);
     return new Response(response.body, {
       status: response.status,
