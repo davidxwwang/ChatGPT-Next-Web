@@ -31,7 +31,7 @@ import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
-import Contact from "./acontact";
+import About from "./about";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -160,7 +160,7 @@ function MyApp() {
       <TabBar />
       <Routes>
         <Route path="/" element={xxx()} />
-        <Route path="/about" element={<Contact />} />
+        <Route path="/about" element={<About />} />
         <Route path={Path.Home} element={<Chat />} />
         <Route path={Path.NewChat} element={<NewChat />} />
         <Route path={Path.Masks} element={<MaskPage />} />

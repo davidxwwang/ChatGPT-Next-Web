@@ -31,8 +31,8 @@ import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
-import Contact from "./acontact";
 import Xxx from "./home2";
+import About from "./about";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -196,8 +196,12 @@ function xxx() {
 function TabBar() {
   return (
     <div className="david-tab-bar">
-      <Link to="/">Home</Link>
-      <Link to="/about">About</Link>
+      <Link className="tab-item" to="/">
+        Home
+      </Link>
+      <Link className="tab-item" to="/about">
+        About
+      </Link>
     </div>
   );
 }
@@ -208,7 +212,7 @@ function MyApp() {
       <TabBar />
       <Routes>
         <Route path="/*" element={<Xxx />} />
-        <Route path="/about" element={<Contact />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </div>
   );
