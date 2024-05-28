@@ -21,6 +21,7 @@ declare global {
 }
 
 async function handle() {
+  console.log("david api/config");
   return NextResponse.json(DANGER_CONFIG);
 }
 

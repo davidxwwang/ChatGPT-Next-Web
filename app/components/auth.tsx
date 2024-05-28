@@ -1,7 +1,7 @@
 import styles from "./auth.module.scss";
 import { IconButton } from "./button";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Path } from "../constant";
 import { useAccessStore } from "../store";
 import Locale from "../locales";
@@ -89,6 +89,14 @@ export function AuthPage() {
           onClick={() => {
             resetAccessCode();
             goHome();
+          }}
+        />
+
+        <IconButton
+          text="login weichat"
+          onClick={() => {
+            window.location.href =
+              "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
           }}
         />
       </div>

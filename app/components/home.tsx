@@ -153,21 +153,21 @@ function Screen() {
           <AuthPage />
         </>
       ) : (
-        MyApp()
+        // MyApp()
 
-        // <>
-        //   <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+        <>
+          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
 
-        //   <div className={styles["window-content"]} id={SlotID.AppBody}>
-        //     <Routes>
-        //       <Route path={Path.Home} element={<Chat />} />
-        //       <Route path={Path.NewChat} element={<NewChat />} />
-        //       <Route path={Path.Masks} element={<MaskPage />} />
-        //       <Route path={Path.Chat} element={<Chat />} />
-        //       <Route path={Path.Settings} element={<Settings />} />
-        //     </Routes>
-        //   </div>
-        //   </>
+          <div className={styles["window-content"]} id={SlotID.AppBody}>
+            <Routes>
+              <Route path={Path.Home} element={<Chat />} />
+              <Route path={Path.NewChat} element={<NewChat />} />
+              <Route path={Path.Masks} element={<MaskPage />} />
+              <Route path={Path.Chat} element={<Chat />} />
+              <Route path={Path.Settings} element={<Settings />} />
+            </Routes>
+          </div>
+        </>
       )}
     </div>
   );
@@ -195,11 +195,11 @@ function xxx() {
 
 function TabBar() {
   return (
-    <div className="david-tab-bar">
-      <Link className="tab-item" to="/">
+    <div className={styles["david-tab-bar"]}>
+      <Link className={styles["tab-item"]} to="/">
         Home
       </Link>
-      <Link className="tab-item" to="/about">
+      <Link className={styles["tab-item"]} to="/about">
         About
       </Link>
     </div>

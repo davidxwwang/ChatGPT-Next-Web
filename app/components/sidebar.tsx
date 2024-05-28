@@ -222,9 +222,12 @@ export function SideBar(props: { className?: string }) {
             </Link>
           </div>
           <div className={styles["sidebar-action"]}>
-            <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
+            <Link to={Path.Auth}>
+              <IconButton icon={<SettingsIcon />} shadow />
+            </Link>
+            {/* <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
               <IconButton icon={<GithubIcon />} shadow />
-            </a>
+            </a> */}
           </div>
         </div>
         <div>
