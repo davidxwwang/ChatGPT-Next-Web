@@ -1,6 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 
 import { getServerSideConfig } from "../../../config/server";
+import { LAST_INPUT_KEY, USER_ID_KEY } from "@/app/constant";
+
+const debug = true;
 
 const serverConfig = getServerSideConfig();
 
@@ -31,38 +34,84 @@ async function handle(
   // const state = searchParams.get('state');
   // const error = searchParams.get('error');
   console.log("[david Route] params ", params, requestToken);
+  if (debug) {
+    const userInfo = {
+      login: "davidxwwang",
+      id: 13027592,
+      node_id: "MDQ6VXNlcjEzMDI3NTky",
+      avatar_url: "https://avatars.githubusercontent.com/u/13027592?v=4",
+      gravatar_id: "",
+      url: "https://api.github.com/users/davidxwwang",
+      html_url: "https://github.com/davidxwwang",
+      followers_url: "https://api.github.com/users/davidxwwang/followers",
+      following_url:
+        "https://api.github.com/users/davidxwwang/following{/other_user}",
+      gists_url: "https://api.github.com/users/davidxwwang/gists{/gist_id}",
+      starred_url:
+        "https://api.github.com/users/davidxwwang/starred{/owner}{/repo}",
+      subscriptions_url:
+        "https://api.github.com/users/davidxwwang/subscriptions",
+      organizations_url: "https://api.github.com/users/davidxwwang/orgs",
+      repos_url: "https://api.github.com/users/davidxwwang/repos",
+      events_url: "https://api.github.com/users/davidxwwang/events{/privacy}",
+      received_events_url:
+        "https://api.github.com/users/davidxwwang/received_events",
+      type: "User",
+      site_admin: false,
+      name: null,
+      company: null,
+      blog: "",
+      location: null,
+      email: null,
+      hireable: null,
+      bio: null,
+      twitter_username: null,
+      public_repos: 84,
+      public_gists: 1,
+      followers: 1,
+      following: 1,
+      created_at: "2015-06-24T04:07:53Z",
+      updated_at: "2024-05-07T01:53:08Z",
+    };
 
-  const tokenResponse = await fetch(
-    "https://github.com/login/oauth/access_token?" +
-      `client_id=Ov23liFmILukWbjxjYbe&` +
-      `client_secret=496d865310a49ea7d0be84f4d2c07397f2e2c43a&` +
-      `code=${requestToken}`,
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-    },
-  );
-
-  if (tokenResponse.ok) {
-    const data = await tokenResponse.json();
-    const accessToken = data.access_token;
-    console.log("Access Token:", data);
-
-    const result = await fetch("https://api.github.com/user", {
-      method: "get",
-      headers: {
-        accept: "application/json",
-        Authorization: `token ${accessToken}`,
-      },
-    });
-    if (result.ok) {
-      const rst = await result.json();
-      console.log("user info:", rst);
-    }
+    // 保存前端
+    localStorage.setItem(USER_ID_KEY, userInfo.node_id);
   } else {
-    console.error("Failed to retrieve access token:", tokenResponse.statusText);
+    const tokenResponse = await fetch(
+      "https://github.com/login/oauth/access_token?" +
+        `client_id=Ov23liFmILukWbjxjYbe&` +
+        `client_secret=496d865310a49ea7d0be84f4d2c07397f2e2c43a&` +
+        `code=${requestToken}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+      },
+    );
+
+    if (tokenResponse.ok) {
+      const data = await tokenResponse.json();
+      const accessToken = data.access_token;
+      console.log("Access Token:", data);
+
+      const result = await fetch("https://api.github.com/user", {
+        method: "get",
+        headers: {
+          accept: "application/json",
+          Authorization: `token ${accessToken}`,
+        },
+      });
+      if (result.ok) {
+        const rst = await result.json();
+        console.log("user info:", rst);
+      }
+    } else {
+      console.error(
+        "Failed to retrieve access token:",
+        tokenResponse.statusText,
+      );
+    }
   }
 
   // 构造 JSON 数据

@@ -309,6 +309,7 @@ export const useChatStore = createPersistStore(
       },
 
       async onUserInput(content: string, attachImages?: string[]) {
+        const xx = get();
         const session = get().currentSession();
         const modelConfig = session.mask.modelConfig;
 
@@ -667,7 +668,9 @@ export const useChatStore = createPersistStore(
         const sessions = get().sessions;
         const index = get().currentSessionIndex;
         updater(sessions[index]);
+        console.log("localstorage begin");
         set(() => ({ sessions }));
+        console.log("localstorage updated");
       },
 
       clearAllData() {
