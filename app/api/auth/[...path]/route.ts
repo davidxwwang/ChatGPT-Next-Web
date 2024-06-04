@@ -33,9 +33,10 @@ async function handle(
   const requestToken = searchParams.get("code");
   // const state = searchParams.get('state');
   // const error = searchParams.get('error');
-  console.log("[david Route] params ", params, requestToken);
+  console.log("[david Route] params ", req.url, requestToken);
+  let userInfo = null;
   if (debug) {
-    const userInfo = {
+    userInfo = {
       login: "davidxwwang",
       id: 13027592,
       node_id: "MDQ6VXNlcjEzMDI3NTky",
@@ -75,7 +76,7 @@ async function handle(
     };
 
     // 保存前端
-    localStorage.setItem(USER_ID_KEY, userInfo.node_id);
+    // localStorage.setItem(USER_ID_KEY, userInfo.node_id);
   } else {
     const tokenResponse = await fetch(
       "https://github.com/login/oauth/access_token?" +
@@ -120,11 +121,19 @@ async function handle(
     redirect_url: "/",
   };
 
+  const login = userInfo?.login ?? "davidxwwang";
+
+  // 构造重定向URL，带有查询参数login
+  const getToken = `/getToken?login=${encodeURIComponent(login)}`;
   const x = NextResponse.json(
     { body: responseData },
     {
       status: 301,
-      headers: { Location: "/", "Content-Type": "application/json" },
+      headers: {
+        Location: `/?login=${encodeURIComponent(login)}`,
+        "Content-Type": "application/json",
+        "david-Control": "david",
+      },
     },
   );
   return x;

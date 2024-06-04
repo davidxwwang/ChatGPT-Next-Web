@@ -87,6 +87,7 @@ import {
   Path,
   REQUEST_TIMEOUT_MS,
   UNFINISHED_INPUT,
+  USER_INFO_KEY,
 } from "../constant";
 import { Avatar } from "./emoji";
 import { ContextPrompts, MaskAvatar, MaskConfig } from "./mask";
@@ -704,6 +705,21 @@ function _Chat() {
     100,
     { leading: true, trailing: true },
   );
+
+  useEffect(() => {
+    console.log("david coming!");
+    const hasQurey = window.location.search.charAt(0) === "?";
+    if (hasQurey) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const login = searchParams.get("login") as string;
+      if (login) {
+        localStorage.setItem(USER_INFO_KEY, login);
+      }
+    }
+
+    console.log("");
+    // make http request to backend
+  }, []);
 
   // auto grow input
   const [inputRows, setInputRows] = useState(2);
