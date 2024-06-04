@@ -125,52 +125,6 @@ const loadAsyncGoogleFont = () => {
   document.head.appendChild(linkEl);
 };
 
-function xxx() {
-  const isHome = location.pathname === Path.Home;
-  return (
-    <>
-      <SideBar className={isHome ? styles["sidebar-show"] : ""} />
-      {/* <SideBar className={ styles["sidebar-show"] } /> */}
-
-      <div className={styles["window-content"]} id={SlotID.AppBody}>
-        <Routes>
-          <Route path={Path.Home} element={<Chat />} />
-          <Route path={Path.NewChat} element={<NewChat />} />
-          <Route path={Path.Masks} element={<MaskPage />} />
-          <Route path={Path.Chat} element={<Chat />} />
-          <Route path={Path.Settings} element={<Settings />} />
-        </Routes>
-      </div>
-    </>
-  );
-}
-
-function TabBar() {
-  return (
-    <div className="david-tab-bar">
-      <Link to="/">Home</Link>
-      <Link to="/about">About</Link>
-    </div>
-  );
-}
-
-function MyApp() {
-  return (
-    <div>
-      <TabBar />
-      <Routes>
-        <Route path="/" element={xxx()} />
-        <Route path="/about" element={<About />} />
-        <Route path={Path.Home} element={<Chat />} />
-        <Route path={Path.NewChat} element={<NewChat />} />
-        <Route path={Path.Masks} element={<MaskPage />} />
-        <Route path={Path.Chat} element={<Chat />} />
-        <Route path={Path.Settings} element={<Settings />} />
-      </Routes>
-    </div>
-  );
-}
-
 export function useLoadData() {
   const config = useAppConfig();
 
@@ -199,6 +153,13 @@ export default function Xxx() {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
+  const style =
+    styles.container +
+    ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${
+      getLang() === "ar" ? styles["rtl-screen"] : ""
+    }`;
+  console.log("david style = " + style);
+
   return (
     <div
       className={
@@ -220,21 +181,4 @@ export default function Xxx() {
       </div>
     </div>
   );
-}
-
-function Home2() {
-  useSwitchTheme();
-  useLoadData();
-  useHtmlLang();
-
-  useEffect(() => {
-    console.log("[Config] got config from build time", getClientConfig());
-    useAccessStore.getState().fetch();
-  }, []);
-
-  if (!useHasHydrated()) {
-    return <Loading />;
-  }
-
-  return <Xxx />;
 }

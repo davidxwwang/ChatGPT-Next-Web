@@ -153,43 +153,23 @@ function Screen() {
           <AuthPage />
         </>
       ) : (
-        // MyApp()
+        <MyApp />
 
-        <>
-          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+        // <>
+        //   <SideBar className={isHome ? styles["sidebar-show"] : ""} />
 
-          <div className={styles["window-content"]} id={SlotID.AppBody}>
-            <Routes>
-              <Route path={Path.Home} element={<Chat />} />
-              <Route path={Path.NewChat} element={<NewChat />} />
-              <Route path={Path.Masks} element={<MaskPage />} />
-              <Route path={Path.Chat} element={<Chat />} />
-              <Route path={Path.Settings} element={<Settings />} />
-            </Routes>
-          </div>
-        </>
+        //   <div className={styles["window-content"]} id={SlotID.AppBody}>
+        //     <Routes>
+        //       <Route path={Path.Home} element={<Chat />} />
+        //       <Route path={Path.NewChat} element={<NewChat />} />
+        //       <Route path={Path.Masks} element={<MaskPage />} />
+        //       <Route path={Path.Chat} element={<Chat />} />
+        //       <Route path={Path.Settings} element={<Settings />} />
+        //     </Routes>
+        //   </div>
+        // </>
       )}
     </div>
-  );
-}
-
-function xxx() {
-  const isHome = location.pathname === Path.Home;
-  return (
-    <>
-      <SideBar className={isHome ? styles["sidebar-show"] : ""} />
-      {/* <SideBar className={ styles["sidebar-show"] } /> */}
-
-      <div className={styles["window-content"]} id={SlotID.AppBody}>
-        <Routes>
-          <Route path={Path.Home} element={<Chat />} />
-          <Route path={Path.NewChat} element={<NewChat />} />
-          <Route path={Path.Masks} element={<MaskPage />} />
-          <Route path={Path.Chat} element={<Chat />} />
-          <Route path={Path.Settings} element={<Settings />} />
-        </Routes>
-      </div>
-    </>
   );
 }
 
@@ -209,7 +189,7 @@ function TabBar() {
 function MyApp() {
   return (
     <div>
-      <TabBar />
+      {/* <TabBar /> */}
       <Routes>
         <Route path="/*" element={<Xxx />} />
         <Route path="/about" element={<About />} />

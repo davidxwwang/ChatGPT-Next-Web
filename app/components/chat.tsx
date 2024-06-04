@@ -1301,6 +1301,8 @@ function _Chat() {
           setAutoScroll(false);
         }}
       >
+        <div style={{ backgroundColor: "red", height: "200px" }}></div>
+
         {messages.map((message, i) => {
           const isUser = message.role === "user";
           const isContext = i < context.length;
@@ -1487,6 +1489,40 @@ function _Chat() {
             </Fragment>
           );
         })}
+
+        <div style={{ height: "100px" }}>
+          <button
+            title="点击清除上下文"
+            style={{
+              fontSize: "14px",
+              height: "calc(100%/4)", // 减去可能的上下边框（如果有的话）
+              width: "100%", // 或者使用 '30%' 如果你想要保持相对于div的30%宽度
+              padding: "5px 10px", // 根据需要调整内边距
+              boxSizing: "border-box", // 这确保了padding和border包含在width和height内
+              border: "none", // 移除button的默认边框，或者设置为你想要的样式
+              backgroundColor: "white", // 为了可见性，你可能需要设置背景色
+              textAlign: "left", // 设置文本左对齐
+            }}
+          >
+            你可以继续问我:
+          </button>
+
+          <button
+            title="点击清除上下文"
+            style={{
+              fontSize: "14px",
+              height: "calc(100% /4)", // 减去可能的上下边框（如果有的话）
+              width: "100%", // 或者使用 '30%' 如果你想要保持相对于div的30%宽度
+              padding: "5px 10px", // 根据需要调整内边距
+              boxSizing: "border-box", // 这确保了padding和border包含在width和height内
+              border: "none", // 移除button的默认边框，或者设置为你想要的样式
+              backgroundColor: "white", // 为了可见性，你可能需要设置背景色
+              textAlign: "left", // 设置文本左对齐
+            }}
+          >
+            你可以继续问我:
+          </button>
+        </div>
       </div>
 
       <div className={styles["chat-input-panel"]}>
