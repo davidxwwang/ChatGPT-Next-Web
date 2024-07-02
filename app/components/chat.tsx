@@ -60,6 +60,7 @@ import {
   getMessageImages,
   isVisionModel,
   compressImage,
+  getMessageImages2,
 } from "../utils";
 
 import dynamic from "next/dynamic";
@@ -1441,11 +1442,22 @@ function _Chat() {
                       parentRef={scrollRef}
                       defaultShow={i >= messages.length - 6}
                     />
-                    <div
+                    {/* <div
                       dangerouslySetInnerHTML={{
                         __html: getMessageTextContent(message),
-                      }}
-                    />
+                      }}                      
+                    /> */}
+                    <div>
+                      <label>
+                        <input type="radio" value="option1" checked={true} />
+                        Option 1
+                      </label>
+                      <label>
+                        <input type="radio" value="option2" checked={false} />
+                        Option 2
+                      </label>
+                    </div>
+
                     {getMessageImages(message).length == 1 && (
                       <img
                         className={styles["chat-message-item-image"]}

@@ -152,7 +152,8 @@ export default function Xxx() {
   const isMobileScreen = useMobileScreen();
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
-
+  const x = styles;
+  const t = styles["tight-container"];
   const style =
     styles.container +
     ` ${shouldTightBorder ? styles["tight-container"] : styles.container} ${

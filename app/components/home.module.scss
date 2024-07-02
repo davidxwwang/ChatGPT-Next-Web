@@ -3,7 +3,7 @@
   border: var(--border-in-light);
   border-radius: 20px;
   box-shadow: var(--shadow);
-  color: var(--black);
+  color: green;
   background-color: var(--white);
   min-width: 600px;
   min-height: 370px;
@@ -25,7 +25,7 @@
   .tight-container {
     --window-width: 100vw;
     --window-height: var(--full-height);
-    --window-content-width: calc(100% - var(--sidebar-width));
+    --window-content-width: calc(0% - var(--sidebar-width));
 
     @include container();
 
