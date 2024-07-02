@@ -18,7 +18,7 @@ One-Click to get a well-designed cross-platform ChatGPT web UI, with GPT3, GPT4 
 
 [网页版](https://app.nextchat.dev/) / [客户端](https://github.com/Yidadaa/ChatGPT-Next-Web/releases) / [反馈](https://github.com/Yidadaa/ChatGPT-Next-Web/issues)
 
-[web-url]: https://chatgpt.nextweb.fun
+[web-url]: https://app.nextchat.dev/
 [download-url]: https://github.com/Yidadaa/ChatGPT-Next-Web/releases
 [Web-image]: https://img.shields.io/badge/Web-PWA-orange?logo=microsoftedge
 [Windows-image]: https://img.shields.io/badge/-Windows-blue?logo=windows
@@ -245,12 +245,16 @@ To control custom models, use `+` to add a custom model, use `-` to hide a model
 
 User `-all` to disable all default models, `+all` to enable all default models.
 
-### `WHITE_WEBDEV_ENDPOINTS` (可选)
+### `WHITE_WEBDEV_ENDPOINTS` (optional)
 
 You can use this option if you want to increase the number of webdav service addresses you are allowed to access, as required by the format：
 - Each address must be a complete endpoint 
 > `https://xxxx/yyy`
 - Multiple addresses are connected by ', '
+
+### `DEFAULT_INPUT_TEMPLATE` (optional)
+
+Customize the default template used to initialize the User Input Preprocessing configuration item in Settings.
 
 ## Requirements
 

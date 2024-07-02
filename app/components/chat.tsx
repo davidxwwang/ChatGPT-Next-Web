@@ -59,9 +59,10 @@ import {
   getMessageTextContent,
   getMessageImages,
   isVisionModel,
-  compressImage,
   getMessageImages2,
 } from "../utils";
+
+import { compressImage } from "@/app/utils/chat";
 
 import dynamic from "next/dynamic";
 
