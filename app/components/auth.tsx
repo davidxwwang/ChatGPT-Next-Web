@@ -38,7 +38,13 @@ export function AuthPage() {
 
       <div className={styles["auth-title"]}>{Locale.Auth.Title}</div>
       <div className={styles["auth-tips"]}>{Locale.Auth.Tips}</div>
-
+      <IconButton
+        text="login weichat"
+        onClick={() => {
+          window.location.href =
+            "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
+        }}
+      />
       <input
         className={styles["auth-input"]}
         type="password"
@@ -89,14 +95,6 @@ export function AuthPage() {
           onClick={() => {
             resetAccessCode();
             goHome();
-          }}
-        />
-
-        <IconButton
-          text="login weichat"
-          onClick={() => {
-            window.location.href =
-              "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
           }}
         />
       </div>

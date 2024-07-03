@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 
 import { getServerSideConfig } from "../../../config/server";
-import { LAST_INPUT_KEY, USER_ID_KEY } from "@/app/constant";
+import { LAST_INPUT_KEY } from "@/app/constant"; // USER_ID_KEY
 
 const debug = true;
 

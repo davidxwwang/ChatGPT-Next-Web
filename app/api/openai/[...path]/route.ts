@@ -6,6 +6,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../auth";
 import { requestOpenai } from "../../common";
 
+import { createTable } from "@/app/api/users/createTable";
+import { testUser } from "@/app/api/users/testDatabase";
+//import mysql from 'mysql';
+
+import mysql from "mysql2/promise";
+
 const ALLOWD_PATH = new Set(Object.values(OpenaiPath));
 
 function getModels(remoteModelRes: OpenAIListModelResponse) {
@@ -76,7 +82,11 @@ async function handle(
   { params }: { params: { path: string[] } },
 ) {
   console.log("[david Route] params ", params);
-  // console.log("[david Route] body ", JSON.stringify(req.body));
+  //createTable().catch(console.error);
+  testUser();
+
+  console.log("david_Route begin createTable-1.");
+
   if (req.method === "OPTIONS") {
     return NextResponse.json({ body: "OK" }, { status: 200 });
   }
@@ -136,7 +146,7 @@ async function handle(
 export const GET = handle;
 export const POST = handle;
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const preferredRegion = [
   "arn1",
   "bom1",

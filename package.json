@@ -3,6 +3,7 @@
   "private": false,
   "license": "mit",
   "scripts": {
+    "create-table": "ts-node  ./app/api/users/createTable.ts",
     "dev": "next dev",
     "build": "cross-env BUILD_MODE=standalone next build",
     "start": "next start",
@@ -27,6 +28,8 @@
     "heic2any": "^0.0.4",
     "html-to-image": "^1.11.11",
     "mermaid": "^10.6.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.10.2",
     "nanoid": "^5.0.3",
     "next": "^14.1.1",
     "node-fetch": "^3.3.1",
@@ -46,6 +49,7 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "1.5.11",
+    "@types/mysql": "^2.15.26",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.70",
     "@types/react-dom": "^18.2.7",
