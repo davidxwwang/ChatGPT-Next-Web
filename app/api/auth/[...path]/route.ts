@@ -3,7 +3,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { getServerSideConfig } from "../../../config/server";
 import { LAST_INPUT_KEY } from "@/app/constant"; // USER_ID_KEY
 
-const debug = true;
+const debug = false;
+const weichat = false;
 
 const serverConfig = getServerSideConfig();
 
@@ -23,17 +24,63 @@ const DANGER_CONFIG = {
 //   type DangerConfig = typeof DANGER_CONFIG;
 // }
 
-async function handle(
-  req: NextRequest,
-  { params }: { params: { path: string[] } },
-) {
-  console.log("redirect api/config");
+const weichat_appid = "wx8cd83039725d811f";
+const weichat_AppSecret = "bbccff07eeac23eda83f73656ee9fbe6";
 
-  const { searchParams } = new URL(req.url);
-  const requestToken = searchParams.get("code");
-  // const state = searchParams.get('state');
-  // const error = searchParams.get('error');
-  console.log("[david Route] params ", req.url, requestToken);
+// https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
+async function getUserWeichatInfo(code: string) {
+  const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${weichat_appid}&secret=${weichat_AppSecret}&code=${code}&grant_type=authorization_code`;
+  const tokenResponse = await fetch(url);
+
+  /**
+   * {
+  "access_token":"ACCESS_TOKEN",
+  "expires_in":7200,
+  "refresh_token":"REFRESH_TOKEN",
+  "openid":"OPENID",
+  "scope":"SCOPE",
+  "is_snapshotuser": 1,
+  "unionid": "UNIONID"
+}
+   */
+  if (tokenResponse.ok) {
+    const data = await tokenResponse.json();
+    const accessToken = data.access_token;
+    const openid = data.openid;
+    console.log("Access Token:", data);
+
+    const result = await fetch(
+      `https://api.weixin.qq.com/sns/userinfo?access_token=${accessToken}&openid=${openid}&lang=zh_CN`,
+      {
+        method: "get",
+        headers: {
+          accept: "application/json",
+        },
+      },
+    );
+    if (result.ok) {
+      const rst = await result.json();
+      console.log("weichat_user info:", rst);
+      /**
+       * {   
+  "openid": "OPENID",
+  "nickname": NICKNAME,
+  "sex": 1,
+  "province":"PROVINCE",
+  "city":"CITY",
+  "country":"COUNTRY",
+  "headimgurl":"https://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
+  "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],
+  "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
+}
+       */
+    }
+  } else {
+    console.error("Failed to retrieve access token:", tokenResponse.statusText);
+  }
+}
+
+async function getUserGithubInfo(requestToken: string) {
   let userInfo = null;
   if (debug) {
     userInfo = {
@@ -137,6 +184,37 @@ async function handle(
     },
   );
   return x;
+}
+
+async function handle(
+  req: NextRequest,
+  { params }: { params: { path: string[] } },
+) {
+  console.log("redirect api/config");
+
+  const { searchParams } = new URL(req.url);
+  const requestToken = searchParams.get("code");
+  if (!requestToken) {
+    return NextResponse.json(
+      {
+        error: true,
+        msg: "no request token",
+      },
+      {
+        status: 400,
+      },
+    );
+  }
+
+  console.log("[david Route] params ", req.url, requestToken);
+  let userInfo = null;
+  if (weichat) {
+    return await getUserWeichatInfo(requestToken);
+  } else {
+    const userInfo = await getUserGithubInfo(requestToken);
+    console.log("[getUserGithubInfo] userInfo ", userInfo);
+    return userInfo;
+  }
 }
 
 export const GET = handle;

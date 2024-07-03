@@ -10,6 +10,16 @@ import BotIcon from "../icons/bot.svg";
 import { useEffect } from "react";
 import { getClientConfig } from "../config/client";
 
+const weichat_appid = "wx8cd83039725d811f";
+const weichat_AppSecret = "bbccff07eeac23eda83f73656ee9fbe6";
+const redirect_uri = encodeURIComponent(
+  "http://127.0.0.1:3000/api/auth/redirect",
+);
+
+const githubOath2Url =
+  "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
+const weichatOath2Url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${weichat_appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
+
 export function AuthPage() {
   const navigate = useNavigate();
   const accessStore = useAccessStore();
@@ -41,8 +51,7 @@ export function AuthPage() {
       <IconButton
         text="login weichat"
         onClick={() => {
-          window.location.href =
-            "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
+          window.location.href = githubOath2Url;
         }}
       />
       <input
