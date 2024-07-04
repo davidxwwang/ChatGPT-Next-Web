@@ -1,84 +1,74 @@
 import pool from "./connect";
+import { User } from "./userDTO";
 
-interface User {
-  id?: number;
-  nickname: string;
-  avatar: string;
-  weichat_id: string;
-  level: string;
-  token_info: string;
-  extras: string;
-}
-
-// 增加用户
-export async function addUser(user: User) {
-  // const connection = await pool.getConnection();
+// 插入用户
+export async function createUser(user: User): Promise<number | null> {
   try {
     const [result] = await (
       await pool
     ).query(
-      "INSERT INTO users (nickname, avatar, weichat_id, level, token_info, extras) VALUES (?, ?, ?, ?, ?, ?)",
+      "INSERT INTO user (openid, unionid, nickname, headimgurl, token_infos, user_level, extras) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
+        user.openid,
+        user.unionid,
         user.nickname,
-        user.avatar,
-        user.weichat_id,
-        user.level,
-        user.token_info,
+        user.headimgurl,
+        user.token_infos,
+        user.user_level,
         user.extras,
       ],
     );
-    return result;
-  } finally {
-    // connection.release();
+    console.log("createUser -- ", result);
+    return (result as any)?.insertId || null;
+    // return result.insertId;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return null;
+  }
+}
+
+// 根据 ID 查询用户
+export async function getUserById(id: number): Promise<User | null> {
+  try {
+    const [rows] = await (
+      await pool
+    ).query("SELECT * FROM user WHERE id = ?", [id]);
+
+    console.log("getUserById -- ", rows);
+    const users = rows as User[];
+    const valid = Array.isArray(users) && users.length > 0;
+    return valid ? users[0] : null;
+  } catch (error) {
+    console.error("Error getting user by ID:", error);
+    return null;
+  }
+}
+
+// 更新用户信息
+export async function updateUser(
+  id: number,
+  newData: Partial<User>,
+): Promise<boolean> {
+  try {
+    const [result] = await (
+      await pool
+    ).query("UPDATE user SET ? WHERE id = ?", [newData, id]);
+    return (result as any).affectedRows > 0;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return false;
   }
 }
 
 // 删除用户
-export async function deleteUser(userId: number) {
-  // const connection = await pool.getConnection();
+export async function deleteUser(id: number): Promise<boolean> {
   try {
     const [result] = await (
       await pool
-    ).query("DELETE FROM users WHERE id = ?", [userId]);
-    return result;
-  } finally {
-    // connection.release();
-  }
-}
-
-// 更新用户
-export async function updateUser(user: User) {
-  //  const connection = await pool.getConnection();
-  try {
-    const [result] = await (
-      await pool
-    ).query(
-      "UPDATE users SET nickname = ?, avatar = ?, weichat_id = ?, level = ?, token_info = ?, extras = ? WHERE id = ?",
-      [
-        user.nickname,
-        user.avatar,
-        user.weichat_id,
-        user.level,
-        user.token_info,
-        user.extras,
-        user.id,
-      ],
-    );
-    return result;
-  } finally {
-    //connection.release();
-  }
-}
-
-// 查询用户
-export async function getUserById(userId: number) {
-  // const connection = await pool.getConnection();
-  try {
-    const [rows] = await (
-      await pool
-    ).query("SELECT * FROM users WHERE id = ?", [userId]);
-    return rows;
-  } finally {
-    //connection.release();
+    ).query("DELETE FROM user WHERE id = ?", [id]);
+    return (result as any).affectedRows > 0;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return false;
   }
 }

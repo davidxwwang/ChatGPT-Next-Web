@@ -7,7 +7,7 @@ import { auth } from "../../auth";
 import { requestOpenai } from "../../common";
 
 import { createTable } from "@/app/api/users/createTable";
-import { testUser } from "@/app/api/users/testDatabase";
+//import { testUser } from "@/app/api/users/testDatabase";
 //import mysql from 'mysql';
 
 import mysql from "mysql2/promise";
@@ -83,7 +83,7 @@ async function handle(
 ) {
   console.log("[david Route] params ", params);
   //createTable().catch(console.error);
-  testUser();
+  //testUser();
 
   console.log("david_Route begin createTable-1.");
 

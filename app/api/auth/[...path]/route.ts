@@ -2,9 +2,12 @@ import { NextResponse, NextRequest } from "next/server";
 
 import { getServerSideConfig } from "../../../config/server";
 import { LAST_INPUT_KEY } from "@/app/constant"; // USER_ID_KEY
+import { use } from "react";
+import { User } from "../../users/userDTO";
+import { createUser, getUserById, updateUser } from "../../users/userService";
 
 const debug = false;
-const weichat = false;
+const weichat = true;
 
 const serverConfig = getServerSideConfig();
 
@@ -29,6 +32,17 @@ const weichat_AppSecret = "bbccff07eeac23eda83f73656ee9fbe6";
 
 // https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
 async function getUserWeichatInfo(code: string) {
+  if (weichat) {
+    return NextResponse.json(
+      {
+        error: true,
+        msg: "no request token",
+      },
+      {
+        status: 400,
+      },
+    );
+  }
   const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${weichat_appid}&secret=${weichat_AppSecret}&code=${code}&grant_type=authorization_code`;
   const tokenResponse = await fetch(url);
 
@@ -209,7 +223,18 @@ async function handle(
   console.log("[david Route] params ", req.url, requestToken);
   let userInfo = null;
   if (weichat) {
-    return await getUserWeichatInfo(requestToken);
+    let user = await getUserWeichatInfo(requestToken);
+    let user2 = {
+      openid: "12345",
+      unionid: "67890",
+      nickname: "John Doe",
+      headimgurl: "http://example.com/avatar.jpg",
+      token_infos: JSON.stringify({ token: "xyz_tt" }),
+      user_level: "basic",
+      extras: "...",
+    };
+    saveUser(user2);
+    return user;
   } else {
     const userInfo = await getUserGithubInfo(requestToken);
     console.log("[getUserGithubInfo] userInfo ", userInfo);
@@ -217,7 +242,23 @@ async function handle(
   }
 }
 
+// 还要把userid save到chrome中
+async function saveUser(user: User) {
+  const userId = await createUser(user);
+
+  if (userId) {
+    console.log(`Created user with ID: ${userId}`);
+
+    const user = await getUserById(userId);
+    console.log("User:", user);
+
+    const updated = await updateUser(userId, { nickname: "david" });
+    console.log("User updated:", updated);
+  }
+  console.log("[saveUser] user ", user);
+}
+
 export const GET = handle;
 export const POST = handle;
 
-export const runtime = "edge";
+export const runtime = "nodejs";
