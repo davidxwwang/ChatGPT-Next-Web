@@ -6,7 +6,8 @@ import { use } from "react";
 import { User } from "../../users/userDTO";
 import { createUser, getUserById, updateUser } from "../../users/userService";
 
-const debug = false;
+const debug = true;
+const test_weichat = true;
 const weichat = true;
 
 const serverConfig = getServerSideConfig();
@@ -27,36 +28,65 @@ const DANGER_CONFIG = {
 //   type DangerConfig = typeof DANGER_CONFIG;
 // }
 
-const weichat_appid = "wx8cd83039725d811f";
-const weichat_AppSecret = "bbccff07eeac23eda83f73656ee9fbe6";
+const weichat_appid = "wxce39dc635f1489a4";
+const weichat_AppSecret = "a37de7e411b63a491718754b1da484e0";
+
+const user2 = {
+  openid: "12345",
+  unionid: "67890",
+  nickname: "John Doe",
+  headimgurl:
+    "https://img2.baidu.com/it/u=490394858,3552134224&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200",
+  token_infos: JSON.stringify({ token: "xyz_tt" }),
+  user_level: "basic",
+  extras: "...",
+} as User;
 
 // https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html
 async function getUserWeichatInfo(code: string) {
-  if (weichat) {
-    return NextResponse.json(
+  if (test_weichat) {
+    const login = user2.openid;
+
+    // 构造重定向URL，带有查询参数login
+    const getToken = `/getToken?login=${encodeURIComponent(login)}`;
+    // const x = NextResponse.json(
+    //   { body: responseData },
+    //   {
+    //     status: 301,
+    //     headers: {
+    //       Location: `/?login=${encodeURIComponent(login)}`,
+    //       "Content-Type": "application/json",
+    //       "david-Control": "david",
+    //     },
+    //   },
+    // );
+    const y = {
+      openid: user2.openid,
+      nickname: user2.nickname,
+      headimgurl: user2.headimgurl,
+    };
+    const userData = encodeURIComponent(JSON.stringify(y));
+    //const x = NextResponse.redirect(getToken);
+    const user_redirectUrl = `/#user_redirect?user=${userData}`;
+    const responseData = {
+      message: "页面已永久重定向到新的地址",
+      redirect_url: user_redirectUrl,
+    };
+    const x = NextResponse.json(
+      { body: responseData },
       {
-        error: true,
-        msg: "no request token",
-      },
-      {
-        status: 400,
+        status: 307,
+        headers: {
+          Location: user_redirectUrl,
+          "Content-Type": "application/json",
+          "david-Control": "david",
+        },
       },
     );
+    return x;
   }
   const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${weichat_appid}&secret=${weichat_AppSecret}&code=${code}&grant_type=authorization_code`;
   const tokenResponse = await fetch(url);
-
-  /**
-   * {
-  "access_token":"ACCESS_TOKEN",
-  "expires_in":7200,
-  "refresh_token":"REFRESH_TOKEN",
-  "openid":"OPENID",
-  "scope":"SCOPE",
-  "is_snapshotuser": 1,
-  "unionid": "UNIONID"
-}
-   */
   if (tokenResponse.ok) {
     const data = await tokenResponse.json();
     const accessToken = data.access_token;
@@ -75,19 +105,30 @@ async function getUserWeichatInfo(code: string) {
     if (result.ok) {
       const rst = await result.json();
       console.log("weichat_user info:", rst);
-      /**
-       * {   
-  "openid": "OPENID",
-  "nickname": NICKNAME,
-  "sex": 1,
-  "province":"PROVINCE",
-  "city":"CITY",
-  "country":"COUNTRY",
-  "headimgurl":"https://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
-  "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],
-  "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
-}
-       */
+      const y = {
+        openid: user2.openid,
+        nickname: user2.nickname,
+        headimgurl: user2.headimgurl,
+      };
+      const userData = encodeURIComponent(JSON.stringify(y));
+      //const x = NextResponse.redirect(getToken);
+      const user_redirectUrl = `/#user_redirect?user=${userData}`;
+      const responseData = {
+        message: "页面已永久重定向到新的地址",
+        redirect_url: user_redirectUrl,
+      };
+      const x = NextResponse.json(
+        { body: responseData },
+        {
+          status: 307,
+          headers: {
+            Location: user_redirectUrl,
+            "Content-Type": "application/json",
+            "david-Control": "david",
+          },
+        },
+      );
+      return x;
     }
   } else {
     console.error("Failed to retrieve access token:", tokenResponse.statusText);
@@ -182,7 +223,8 @@ async function getUserGithubInfo(requestToken: string) {
     redirect_url: "/",
   };
 
-  const login = userInfo?.login ?? "davidxwwang";
+  //const login = userInfo?.login ?? "davidxwwang";
+  const login = user2.openid;
 
   // 构造重定向URL，带有查询参数login
   const getToken = `/getToken?login=${encodeURIComponent(login)}`;
@@ -224,15 +266,6 @@ async function handle(
   let userInfo = null;
   if (weichat) {
     let user = await getUserWeichatInfo(requestToken);
-    let user2 = {
-      openid: "12345",
-      unionid: "67890",
-      nickname: "John Doe",
-      headimgurl: "http://example.com/avatar.jpg",
-      token_infos: JSON.stringify({ token: "xyz_tt" }),
-      user_level: "basic",
-      extras: "...",
-    };
     saveUser(user2);
     return user;
   } else {

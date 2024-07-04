@@ -2,7 +2,7 @@ import styles from "./auth.module.scss";
 import { IconButton } from "./button";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Path } from "../constant";
+import { Path, USER_INFO_KEY } from "../constant";
 import { useAccessStore } from "../store";
 import Locale from "../locales";
 
@@ -10,11 +10,9 @@ import BotIcon from "../icons/bot.svg";
 import { useEffect } from "react";
 import { getClientConfig } from "../config/client";
 
-const weichat_appid = "wx8cd83039725d811f";
+const weichat_appid = "wxce39dc635f1489a4";
 const weichat_AppSecret = "bbccff07eeac23eda83f73656ee9fbe6";
-const redirect_uri = encodeURIComponent(
-  "http://127.0.0.1:3000/api/auth/redirect",
-);
+const redirect_uri = encodeURIComponent("http://x-geeks.com/api/auth/redirect");
 
 const githubOath2Url =
   "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
@@ -38,6 +36,17 @@ export function AuthPage() {
       navigate(Path.Settings);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const hasQurey = window.location.search.charAt(0) === "?";
+    if (hasQurey) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const login = searchParams.get("login") as string;
+      if (login) {
+        localStorage.setItem(USER_INFO_KEY, login);
+      }
+    }
   }, []);
 
   return (

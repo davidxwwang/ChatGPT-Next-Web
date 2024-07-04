@@ -32,6 +32,7 @@ import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 import { identifyDefaultClaudeModel } from "../utils/checkers";
 import About from "./about";
+import RedirectPage from "./user-redirect";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -178,6 +179,7 @@ export default function Xxx() {
           <Route path={Path.Masks} element={<MaskPage />} />
           <Route path={Path.Chat} element={<Chat />} />
           <Route path={Path.Settings} element={<Settings />} />
+          <Route path={Path.User_Redirect} element={<RedirectPage />} />
         </Routes>
       </div>
     </div>
