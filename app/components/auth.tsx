@@ -49,6 +49,8 @@ export function AuthPage() {
     }
   }, []);
 
+  const userInfo = JSON.parse(localStorage.getItem("user") as string);
+  const isLogin = userInfo != null;
   return (
     <div className={styles["auth-page"]}>
       <div className={`no-dark ${styles["auth-logo"]}`}>
@@ -57,6 +59,21 @@ export function AuthPage() {
 
       <div className={styles["auth-title"]}>{Locale.Auth.Title}</div>
       <div className={styles["auth-tips"]}>{Locale.Auth.Tips}</div>
+      {isLogin ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={userInfo.headimgurl}
+            alt="User Avatar"
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: "50%",
+              marginRight: 20,
+            }}
+          />
+          <span>{userInfo.nickname}</span>
+        </div>
+      ) : null}
       <IconButton
         text="login weichat"
         onClick={() => {

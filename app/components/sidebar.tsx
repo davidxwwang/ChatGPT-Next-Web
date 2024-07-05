@@ -142,6 +142,8 @@ export function SideBar(props: { className?: string }) {
   );
 
   useHotKey();
+  const userInfo = JSON.parse(localStorage.getItem("user") as string);
+  const isLogin = userInfo != null;
 
   return (
     <div
@@ -239,6 +241,24 @@ export function SideBar(props: { className?: string }) {
           />
         </div>
       </div>
+
+      {isLogin ? (
+        <div className={styles["sidebar-tail-user"]}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={userInfo.headimgurl}
+              alt="User Avatar"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: "50%",
+                marginRight: 20,
+              }}
+            />
+            <span>{userInfo.nickname}</span>
+          </div>
+        </div>
+      ) : null}
 
       <div
         className={styles["sidebar-drag"]}
