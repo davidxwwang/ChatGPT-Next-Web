@@ -11,8 +11,8 @@ export interface User {
   updated_at?: Date;
 }
 
-enum UserLevel {
+export enum UserLevel {
   TOURIST = "tourist", // 未注册
-  COMMON = "common", // 注册未付费
-  VIP = "vip", // 注册且付费
+  COMMON = "common", // 登录未付费
+  VIP = "vip", // 登录且付费
 }

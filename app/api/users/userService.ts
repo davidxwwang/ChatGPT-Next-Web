@@ -7,7 +7,7 @@ export async function createUser(user: User): Promise<number | null> {
     const [result] = await (
       await pool
     ).query(
-      "INSERT INTO user (openid, unionid, nickname, headimgurl, token_infos, user_level, extras) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO user (openid, unionid, nickname, headimgurl, token_infos, user_level, extras) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE openid = openid",
       [
         user.openid,
         user.unionid,

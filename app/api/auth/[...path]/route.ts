@@ -3,11 +3,11 @@ import { NextResponse, NextRequest } from "next/server";
 import { getServerSideConfig } from "../../../config/server";
 import { LAST_INPUT_KEY } from "@/app/constant"; // USER_ID_KEY
 import { use } from "react";
-import { User } from "../../users/userDTO";
+import { User, UserLevel } from "../../users/userDTO";
 import { createUser, getUserById, updateUser } from "../../users/userService";
 
 const debug = true;
-const test_weichat = true;
+const test_weichat = false;
 const weichat = true;
 
 const serverConfig = getServerSideConfig();
@@ -46,20 +46,8 @@ const user2 = {
 async function getUserWeichatInfo(code: string) {
   if (test_weichat) {
     const login = user2.openid;
-
     // 构造重定向URL，带有查询参数login
     const getToken = `/getToken?login=${encodeURIComponent(login)}`;
-    // const x = NextResponse.json(
-    //   { body: responseData },
-    //   {
-    //     status: 301,
-    //     headers: {
-    //       Location: `/?login=${encodeURIComponent(login)}`,
-    //       "Content-Type": "application/json",
-    //       "david-Control": "david",
-    //     },
-    //   },
-    // );
     const y = {
       openid: user2.openid,
       nickname: user2.nickname,
@@ -90,6 +78,7 @@ async function getUserWeichatInfo(code: string) {
   if (tokenResponse.ok) {
     const data = await tokenResponse.json();
     const accessToken = data.access_token;
+    const refresh_token = data.refresh_token;
     const openid = data.openid;
     console.log("Access Token:", data);
 
@@ -105,34 +94,54 @@ async function getUserWeichatInfo(code: string) {
     if (result.ok) {
       const rst = await result.json();
       console.log("weichat_user info:", rst);
-      const y = {
-        openid: user2.openid,
-        nickname: user2.nickname,
-        headimgurl: user2.headimgurl,
+      const user = {
+        openid: rst.openid,
+        unionid: rst.unionid,
+        nickname: rst.nickname,
+        headimgurl: rst.headimgurl,
+        token_infos: JSON.stringify({
+          accessToken: accessToken,
+          refresh_token: refresh_token,
+        }),
+        user_level: UserLevel.COMMON,
+      } as User;
+
+      const userInfo = {
+        openid: rst.openid,
+        nickname: rst.nickname,
+        headimgurl: rst.headimgurl,
       };
-      const userData = encodeURIComponent(JSON.stringify(y));
-      //const x = NextResponse.redirect(getToken);
-      const user_redirectUrl = `/#user_redirect?user=${userData}`;
-      const responseData = {
-        message: "页面已永久重定向到新的地址",
-        redirect_url: user_redirectUrl,
-      };
-      const x = NextResponse.json(
-        { body: responseData },
+      const userInfo2 = encodeURIComponent(JSON.stringify(userInfo));
+      const userRedirectUrl = `/#user_redirect?user=${userInfo2}`;
+      saveUser(user);
+      return NextResponse.json(
+        {
+          body: {
+            message: "页面已永久重定向到新的地址",
+            redirect_url: userRedirectUrl,
+          },
+        },
         {
           status: 307,
           headers: {
-            Location: user_redirectUrl,
+            Location: userRedirectUrl,
             "Content-Type": "application/json",
-            "david-Control": "david",
           },
         },
       );
-      return x;
     }
   } else {
     console.error("Failed to retrieve access token:", tokenResponse.statusText);
   }
+  return NextResponse.json(
+    {
+      error: true,
+      msg: "no request token",
+    },
+    {
+      status: 400,
+    },
+  );
 }
 
 async function getUserGithubInfo(requestToken: string) {
@@ -266,7 +275,6 @@ async function handle(
   let userInfo = null;
   if (weichat) {
     let user = await getUserWeichatInfo(requestToken);
-    saveUser(user2);
     return user;
   } else {
     const userInfo = await getUserGithubInfo(requestToken);

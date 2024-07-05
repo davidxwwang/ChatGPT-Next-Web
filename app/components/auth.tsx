@@ -31,6 +31,11 @@ export function AuthPage() {
     });
   }; // Reset access code to empty string
 
+  const logout = () => {
+    localStorage.removeItem("user");
+    window.location.reload();
+  };
+
   useEffect(() => {
     if (getClientConfig()?.isApp) {
       navigate(Path.Settings);
@@ -75,11 +80,20 @@ export function AuthPage() {
         </div>
       ) : null}
       <IconButton
-        text="login weichat"
+        text="微信登录"
         onClick={() => {
-          window.location.href = githubOath2Url;
+          window.location.href = weichatOath2Url;
         }}
       />
+      {isLogin ? (
+        <IconButton
+          text="微信logout"
+          onClick={() => {
+            logout();
+          }}
+        />
+      ) : null}
+
       <input
         className={styles["auth-input"]}
         type="password"
