@@ -30,6 +30,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
+import oauth2loginUrl from "../utils/constans";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -141,6 +142,14 @@ export function SideBar(props: { className?: string }) {
     [isMobileScreen],
   );
 
+  // const david = {
+  //   openid: "oipho6j4PIZv9Lhg4ypmpR6j2I7Q",
+  //   nickname: "davidwang",
+  //   headimgurl:
+  //     "https://thirdwx.qlogo.cn/mmopen/vi_32/9aSoX1VtTdHJOUDMiaCXfRhJfXjb0acgW25EgWK1ibicpI6sQ3ktYYESaPx9kKiaics2ictnVp6F8L6vfb4nOzp6HdPQ/132"
+  // }
+  // localStorage.setItem("user", JSON.stringify(david));
+
   useHotKey();
   const userInfo = JSON.parse(localStorage.getItem("user") as string);
   const isLogin = userInfo != null;
@@ -242,6 +251,8 @@ export function SideBar(props: { className?: string }) {
         </div>
       </div>
 
+      <div className={styles["line"]}></div>
+
       {isLogin ? (
         <div className={styles["sidebar-tail-user"]}>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -258,7 +269,18 @@ export function SideBar(props: { className?: string }) {
             <span>{userInfo.nickname}</span>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div>
+          <IconButton
+            icon={<AddIcon />}
+            text="微信登录"
+            onClick={() => {
+              window.location.href = oauth2loginUrl;
+            }}
+            shadow
+          />
+        </div>
+      )}
 
       <div
         className={styles["sidebar-drag"]}

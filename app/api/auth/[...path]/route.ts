@@ -32,11 +32,11 @@ const weichat_appid = "wxce39dc635f1489a4";
 const weichat_AppSecret = "a37de7e411b63a491718754b1da484e0";
 
 const user2 = {
-  openid: "12345",
+  openid: "oipho6j4PIZv9Lhg4ypmpR6j2I7Q",
   unionid: "67890",
-  nickname: "John Doe",
+  nickname: "davidwang",
   headimgurl:
-    "https://img2.baidu.com/it/u=490394858,3552134224&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200",
+    "https://thirdwx.qlogo.cn/mmopen/vi_32/9aSoX1VtTdHJOUDMiaCXfRhJfXjb0acgW25EgWK1ibicpI6sQ3ktYYESaPx9kKiaics2ictnVp6F8L6vfb4nOzp6HdPQ/132",
   token_infos: JSON.stringify({ token: "xyz_tt" }),
   user_level: "basic",
   extras: "...",
@@ -293,8 +293,8 @@ async function saveUser(user: User) {
     const user = await getUserById(userId);
     console.log("User:", user);
 
-    const updated = await updateUser(userId, { nickname: "david" });
-    console.log("User updated:", updated);
+    // const updated = await updateUser(userId, { nickname: "david" });
+    // console.log("User updated:", updated);
   }
   console.log("[saveUser] user ", user);
 }
