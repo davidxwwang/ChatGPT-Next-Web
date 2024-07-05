@@ -51,12 +51,12 @@ export function AuthPage() {
   const isLogin = userInfo != null;
   return (
     <div className={styles["auth-page"]}>
-      <div className={`no-dark ${styles["auth-logo"]}`}>
+      {/* <div className={`no-dark ${styles["auth-logo"]}`}>
         <BotIcon />
-      </div>
+      </div> */}
+      {/* <div className={styles["auth-title"]}>{Locale.Auth.Title}</div>
+      <div className={styles["auth-tips"]}>{Locale.Auth.Tips}</div> */}
 
-      <div className={styles["auth-title"]}>{Locale.Auth.Title}</div>
-      <div className={styles["auth-tips"]}>{Locale.Auth.Tips}</div>
       {isLogin ? (
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
@@ -87,7 +87,7 @@ export function AuthPage() {
         />
       ) : null}
 
-      <input
+      {/* <input
         className={styles["auth-input"]}
         type="password"
         placeholder={Locale.Auth.Input}
@@ -124,14 +124,18 @@ export function AuthPage() {
             }}
           />
         </>
-      ) : null}
+      ) : null} */}
 
       <div className={styles["auth-actions"]}>
-        <IconButton
+        {/* <IconButton
           text={Locale.Auth.Confirm}
           type="primary"
           onClick={goChat}
-        />
+        /> */}
+        <div className={styles["auth-title"]}>{"产品反馈"}</div>
+        <div className={styles["auth-tips"]}>{"联系客服"}</div>
+        <div className={styles["auth-tips"]}>{"更新日志"}</div>
+        <div className={styles["auth-tips"]}>{"关于我们"}</div>
         <IconButton
           text={Locale.Auth.Later}
           onClick={() => {
