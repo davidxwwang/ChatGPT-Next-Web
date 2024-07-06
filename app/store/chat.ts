@@ -314,7 +314,7 @@ export const useChatStore = createPersistStore(
         const modelConfig = session.mask.modelConfig;
 
         const userContent = fillTemplateWith(content, modelConfig);
-        console.log("[User Input] after template: ", userContent);
+        console.log("用户输入 [User Input]: ", userContent);
 
         let mContent: string | MultimodalContent[] = userContent;
 
@@ -377,6 +377,7 @@ export const useChatStore = createPersistStore(
         api.llm.chat({
           messages: sendMessages,
           config: { ...modelConfig, stream: true },
+          userInfo: get().getUserInfo(),
           onUpdate(message) {
             botMessage.streaming = true;
             if (message) {
@@ -424,6 +425,10 @@ export const useChatStore = createPersistStore(
             );
           },
         });
+      },
+
+      getUserInfo() {
+        return localStorage.getItem("user") as string;
       },
 
       getMemoryPrompt() {

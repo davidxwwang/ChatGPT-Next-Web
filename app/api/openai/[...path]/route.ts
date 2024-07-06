@@ -82,10 +82,8 @@ async function handle(
   { params }: { params: { path: string[] } },
 ) {
   console.log("[david Route] params ", params);
-  //createTable().catch(console.error);
-  //testUser();
-
-  console.log("david_Route begin createTable-1.");
+  const cookie = req.cookies.getAll();
+  console.log("req = ", await req.text());
 
   if (req.method === "OPTIONS") {
     return NextResponse.json({ body: "OK" }, { status: 200 });
@@ -112,7 +110,6 @@ async function handle(
       status: 401,
     });
   }
-  const cookie = req.cookies.getAll();
   try {
     const fetchOptions: RequestInit = {
       headers: {
