@@ -309,6 +309,7 @@ export const useChatStore = createPersistStore(
       },
 
       async onUserInput(content: string, attachImages?: string[]) {
+        showToast("请先登录！");
         const xx = get();
         const session = get().currentSession();
         const modelConfig = session.mask.modelConfig;
@@ -374,11 +375,11 @@ export const useChatStore = createPersistStore(
         }
 
         // make request
-        api.llm.chat({
+        const chatData = {
           messages: sendMessages,
           config: { ...modelConfig, stream: true },
           userInfo: get().getUserInfo(),
-          onUpdate(message) {
+          onUpdate(message: string | MultimodalContent[]) {
             botMessage.streaming = true;
             if (message) {
               botMessage.content = message;
@@ -387,7 +388,7 @@ export const useChatStore = createPersistStore(
               session.messages = session.messages.concat();
             });
           },
-          onFinish(message) {
+          onFinish(message: string | MultimodalContent[]) {
             botMessage.streaming = false;
             if (message) {
               botMessage.content = message;
@@ -395,7 +396,7 @@ export const useChatStore = createPersistStore(
             }
             ChatControllerPool.remove(session.id, botMessage.id);
           },
-          onError(error) {
+          onError(error: { message: string | string[] }) {
             const isAborted = error.message.includes("aborted");
             botMessage.content +=
               "\n\n" +
@@ -416,7 +417,7 @@ export const useChatStore = createPersistStore(
 
             console.error("[Chat] failed ", error);
           },
-          onController(controller) {
+          onController(controller: AbortController) {
             // collect controller for stop/retry
             ChatControllerPool.addController(
               session.id,
@@ -424,7 +425,9 @@ export const useChatStore = createPersistStore(
               controller,
             );
           },
-        });
+        };
+        console.log("chatData: ", chatData);
+        api.llm.chat(chatData);
       },
 
       getUserInfo() {
@@ -578,8 +581,10 @@ export const useChatStore = createPersistStore(
               content: Locale.Store.Prompt.Topic,
             }),
           );
+          console.log("[Summarize]1 ", topicMessages);
           api.llm.chat({
             messages: topicMessages,
+            userInfo: get().getUserInfo(),
             config: {
               model: getSummarizeModel(session.mask.modelConfig.model),
               stream: false,
@@ -632,6 +637,7 @@ export const useChatStore = createPersistStore(
            * this param is just shit
            **/
           const { max_tokens, ...modelcfg } = modelConfig;
+          console.log("[Summarize]2 ", modelcfg);
           api.llm.chat({
             messages: toBeSummarizedMsgs.concat(
               createMessage({

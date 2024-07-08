@@ -96,3 +96,13 @@ export function auth(req: NextRequest, modelProvider: ModelProvider) {
     error: false,
   };
 }
+
+export async function authUser(req: NextRequest, modelProvider: ModelProvider) {
+  const data = await req.json();
+  console.log("req0 = ", (data.messages as Array<any>).length);
+  console.log("data.userInfo = ", data.userInfo);
+  const isUserNotLogin = data.userInfo == null;
+  return {
+    error: isUserNotLogin,
+  };
+}

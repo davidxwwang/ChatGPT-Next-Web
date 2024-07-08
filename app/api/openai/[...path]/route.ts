@@ -3,7 +3,7 @@ import { getServerSideConfig } from "@/app/config/server";
 import { ModelProvider, OpenaiPath } from "@/app/constant";
 import { prettyObject } from "@/app/utils/format";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../auth";
+import { auth, authUser } from "../../auth";
 import { requestOpenai } from "../../common";
 
 import { createTable } from "@/app/api/users/createTable";
@@ -83,7 +83,6 @@ async function handle(
 ) {
   console.log("[david Route] params ", params);
   const cookie = req.cookies.getAll();
-  console.log("req = ", await req.text());
 
   if (req.method === "OPTIONS") {
     return NextResponse.json({ body: "OK" }, { status: 200 });
@@ -104,7 +103,8 @@ async function handle(
     );
   }
 
-  const authResult = auth(req, ModelProvider.GPT);
+  //const authResult = auth(req, ModelProvider.GPT);
+  const authResult = await authUser(req, ModelProvider.GPT);
   if (authResult.error) {
     return NextResponse.json(authResult, {
       status: 401,
