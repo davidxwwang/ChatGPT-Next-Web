@@ -6,22 +6,23 @@ enum OuahMode {
 
 const oauthMode = OuahMode.htmlMode;
 
+const redirect_uri = encodeURIComponent("http://x-geeks.com/api/auth/redirect");
+
 let weichat_appid = "";
 let weichat_AppSecret = "";
+let weichatOath2Url = "";
 if (OuahMode.htmlMode == oauthMode) {
   weichat_appid = "wx54a6d02084c1e466";
   weichat_AppSecret = "7d10851447c03fdbfb1c1890172a19a6";
+  weichatOath2Url = `https://open.weixin.qq.com/connect/qrconnect?appid=${weichat_appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect`;
 } else if (OuahMode.gongzhonghaoMode == oauthMode) {
   weichat_appid = "wxce39dc635f1489a4";
   weichat_AppSecret = "bbccff07eeac23eda83f73656ee9fbe6";
+  weichatOath2Url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${weichat_appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
 }
-
-const redirect_uri = encodeURIComponent("http://x-geeks.com/api/auth/redirect");
 
 const githubOath2Url =
   "https://github.com/login/oauth/authorize?client_id=Ov23liFmILukWbjxjYbe&redirect_uri=http://127.0.0.1:3000/api/auth/redirect";
-
-const weichatOath2Url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${weichat_appid}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
 
 const debug_model = false;
 
