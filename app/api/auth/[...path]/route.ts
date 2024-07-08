@@ -5,6 +5,7 @@ import { LAST_INPUT_KEY } from "@/app/constant"; // USER_ID_KEY
 import { use } from "react";
 import { User, UserLevel } from "../../users/userDTO";
 import { createUser, getUserById, updateUser } from "../../users/userService";
+import { weichat_appid, weichat_AppSecret } from "@/app/utils/constans";
 
 const debug = true;
 const test_weichat = false;
@@ -28,8 +29,8 @@ const DANGER_CONFIG = {
 //   type DangerConfig = typeof DANGER_CONFIG;
 // }
 
-const weichat_appid = "wxce39dc635f1489a4";
-const weichat_AppSecret = "a37de7e411b63a491718754b1da484e0";
+// const weichat_appid = "wxce39dc635f1489a4";
+// const weichat_AppSecret = "a37de7e411b63a491718754b1da484e0";
 
 const user2 = {
   openid: "oipho6j4PIZv9Lhg4ypmpR6j2I7Q",

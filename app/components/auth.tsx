@@ -9,7 +9,7 @@ import Locale from "../locales";
 import BotIcon from "../icons/bot.svg";
 import { useEffect } from "react";
 import { getClientConfig } from "../config/client";
-import oauth2loginUrl from "../utils/constans";
+import { oauth2logUrl } from "../utils/constans";
 
 export function AuthPage() {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export function AuthPage() {
       <IconButton
         text="微信登录"
         onClick={() => {
-          window.location.href = oauth2loginUrl;
+          window.location.href = oauth2logUrl;
         }}
       />
       {isLogin ? (
