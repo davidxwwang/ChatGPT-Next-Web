@@ -10,6 +10,7 @@ import BotIcon from "../icons/bot.svg";
 import { useEffect } from "react";
 import { getClientConfig } from "../config/client";
 import { oauth2logUrl } from "../utils/constans";
+import { getHeaders } from "../client/api";
 
 export function AuthPage() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export function AuthPage() {
 
   const goHome = () => navigate(Path.Home);
   const goChat = () => navigate(Path.Chat);
+  const goAlipay = () => navigate(Path.Alipay);
   const resetAccessCode = () => {
     accessStore.update((access) => {
       access.openaiApiKey = "";
@@ -141,6 +143,12 @@ export function AuthPage() {
           onClick={() => {
             resetAccessCode();
             goHome();
+          }}
+        />
+        <IconButton
+          text="支付宝支付"
+          onClick={() => {
+            goAlipay();
           }}
         />
       </div>

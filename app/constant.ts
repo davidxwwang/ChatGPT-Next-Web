@@ -22,6 +22,7 @@ export enum Path {
   Masks = "/masks",
   Auth = "/auth",
   User_Redirect = "/user_redirect",
+  Alipay = "/alipay",
 }
 
 export enum ApiPath {
